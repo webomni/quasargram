@@ -1,7 +1,7 @@
 <template>
   <q-page class="constrain-more q-pa-md" id="PageCamera">
     <div class="camera-frame q-pa-md">
-      <img class="full-width" src="https://cdn.quasar.dev/img/parallax2.jpg" />
+      <video class="full-width" ref="video" />
     </div>
     <div class="text-center q-pa-md">
       <q-btn round color="black" icon="eva-camera" size="lg" />
@@ -34,7 +34,7 @@
 
 <script setup>
 import { uid } from "quasar";
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
 
 const post = reactive([
   {
@@ -45,6 +45,20 @@ const post = reactive([
     date: Date.now(),
   },
 ]);
+
+const initCamera = function () {
+  navigator.mediaDevices
+    .getUserMedia({
+      video: true,
+    })
+    .then((stream) => {
+      $refs.video.srcObject = stream;
+    });
+};
+
+onMounted(() => {
+  initCamera();
+});
 </script>
 
 <style lang="scss" scoped>
