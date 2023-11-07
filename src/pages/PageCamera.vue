@@ -1,10 +1,21 @@
 <template>
   <q-page class="constrain-more q-pa-md" id="PageCamera">
     <div class="camera-frame q-pa-md">
-      <video class="full-width" ref="video" />
+      <video
+        class="full-width"
+        ref="video"
+        src="https://cdn.quasar.dev/img/parallax2.jpg"
+      />
+      <canvas ref="canvas" class="full-width" height="240" />
     </div>
     <div class="text-center q-pa-md">
-      <q-btn round color="black" icon="eva-camera" size="lg" />
+      <q-btn
+        @click="captureImage"
+        color="grey-10"
+        icon="eva-camera"
+        round
+        size="lg"
+      />
       <div class="row justify-center q-ma-md">
         <q-input
           v-model="post.caption"
@@ -34,7 +45,7 @@
 
 <script setup>
 import { uid } from "quasar";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 
 const post = reactive([
   {
@@ -46,16 +57,25 @@ const post = reactive([
   },
 ]);
 
+const video = ref(null);
+const canvas = ref(null);
+
 const initCamera = function () {
+  console.log("iniciou a camera");
   navigator.mediaDevices
     .getUserMedia({
       video: true,
     })
     .then((stream) => {
-      $refs.video.srcObject = stream;
+      video.value.srcObject = stream;
     });
 };
+const captureImage = function () {
+  let myVideo = video;
+  let myCanvas = canvas;
 
+  myCanvas.value.width = myVideo.value.getBoundingClientRect().width;
+};
 onMounted(() => {
   initCamera();
 });
