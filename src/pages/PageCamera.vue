@@ -1,11 +1,7 @@
 <template>
   <q-page class="constrain-more q-pa-md" id="PageCamera">
     <div class="camera-frame q-pa-md">
-      <video
-        class="full-width"
-        ref="video"
-        src="https://cdn.quasar.dev/img/parallax2.jpg"
-      />
+      <video autoplay class="full-width" ref="videoplay" />
       <canvas ref="canvas" class="full-width" height="240" />
     </div>
     <div class="text-center q-pa-md">
@@ -57,7 +53,7 @@ const post = reactive([
   },
 ]);
 
-const video = ref(null);
+const videoplay = ref(null);
 const canvas = ref(null);
 
 const initCamera = function () {
@@ -66,12 +62,16 @@ const initCamera = function () {
     .getUserMedia({
       video: true,
     })
-    .then((stream) => {
-      video.value.srcObject = stream;
+    .then((MediaStream) => {
+      console.log("Abrindo webcam ");
+      videoplay.value.srcObject = MediaStream;
+    })
+    .catch((erro) => {
+      console.log("Erro aoa abrir webcam ".erro);
     });
 };
 const captureImage = function () {
-  let myVideo = video;
+  let myVideo = videoplay;
   let myCanvas = canvas;
 
   myCanvas.value.width = myVideo.value.getBoundingClientRect().width;
